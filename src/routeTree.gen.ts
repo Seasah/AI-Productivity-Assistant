@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AppAssistantRouteImport } from './routes/_app.assistant'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppEmailRouteImport } from './routes/_app.email'
 import { Route as AppMeetingsRouteImport } from './routes/_app.meetings'
@@ -21,6 +22,8 @@ import { Route as AppResourcesRouteImport } from './routes/_app.resources'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiGenerateRouteImport } from './routes/api/generate'
+import { Route as AppAssistantIndexRouteImport } from './routes/_app.assistant.index'
+import { Route as AppAssistantThreadIdRouteImport } from './routes/_app.assistant.$threadId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -35,6 +38,11 @@ const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppAssistantRoute = AppAssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
@@ -81,10 +89,21 @@ const ApiGenerateRoute = ApiGenerateRouteImport.update({
   path: '/api/generate',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppAssistantIndexRoute = AppAssistantIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppAssistantRoute,
+} as any)
+const AppAssistantThreadIdRoute = AppAssistantThreadIdRouteImport.update({
+  id: '/$threadId',
+  path: '/$threadId',
+  getParentRoute: () => AppAssistantRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/assistant': typeof AppAssistantRouteWithChildren
   '/dashboard': typeof AppDashboardRoute
   '/email': typeof AppEmailRoute
   '/meetings': typeof AppMeetingsRoute
@@ -94,6 +113,8 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRoute
   '/api/chat': typeof ApiChatRoute
   '/api/generate': typeof ApiGenerateRoute
+  '/assistant/$threadId': typeof AppAssistantThreadIdRoute
+  '/assistant/': typeof AppAssistantIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -107,12 +128,15 @@ export interface FileRoutesByTo {
   '/settings': typeof AppSettingsRoute
   '/api/chat': typeof ApiChatRoute
   '/api/generate': typeof ApiGenerateRoute
+  '/assistant/$threadId': typeof AppAssistantThreadIdRoute
+  '/assistant': typeof AppAssistantIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_app/assistant': typeof AppAssistantRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/email': typeof AppEmailRoute
   '/_app/meetings': typeof AppMeetingsRoute
@@ -122,12 +146,15 @@ export interface FileRoutesById {
   '/_app/settings': typeof AppSettingsRoute
   '/api/chat': typeof ApiChatRoute
   '/api/generate': typeof ApiGenerateRoute
+  '/_app/assistant/$threadId': typeof AppAssistantThreadIdRoute
+  '/_app/assistant/': typeof AppAssistantIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/assistant'
     | '/dashboard'
     | '/email'
     | '/meetings'
@@ -137,6 +164,8 @@ export interface FileRouteTypes {
     | '/settings'
     | '/api/chat'
     | '/api/generate'
+    | '/assistant/$threadId'
+    | '/assistant/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -150,11 +179,14 @@ export interface FileRouteTypes {
     | '/settings'
     | '/api/chat'
     | '/api/generate'
+    | '/assistant/$threadId'
+    | '/assistant'
   id:
     | '__root__'
     | '/'
     | '/_app'
     | '/auth'
+    | '/_app/assistant'
     | '/_app/dashboard'
     | '/_app/email'
     | '/_app/meetings'
@@ -164,6 +196,8 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/api/chat'
     | '/api/generate'
+    | '/_app/assistant/$threadId'
+    | '/_app/assistant/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -196,6 +230,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_app/assistant': {
+      id: '/_app/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof AppAssistantRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/dashboard': {
       id: '/_app/dashboard'
@@ -260,10 +301,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGenerateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/assistant/': {
+      id: '/_app/assistant/'
+      path: '/'
+      fullPath: '/assistant/'
+      preLoaderRoute: typeof AppAssistantIndexRouteImport
+      parentRoute: typeof AppAssistantRoute
+    }
+    '/_app/assistant/$threadId': {
+      id: '/_app/assistant/$threadId'
+      path: '/$threadId'
+      fullPath: '/assistant/$threadId'
+      preLoaderRoute: typeof AppAssistantThreadIdRouteImport
+      parentRoute: typeof AppAssistantRoute
+    }
   }
 }
 
+interface AppAssistantRouteChildren {
+  AppAssistantThreadIdRoute: typeof AppAssistantThreadIdRoute
+  AppAssistantIndexRoute: typeof AppAssistantIndexRoute
+}
+
+const AppAssistantRouteChildren: AppAssistantRouteChildren = {
+  AppAssistantThreadIdRoute: AppAssistantThreadIdRoute,
+  AppAssistantIndexRoute: AppAssistantIndexRoute,
+}
+
+const AppAssistantRouteWithChildren = AppAssistantRoute._addFileChildren(
+  AppAssistantRouteChildren,
+)
+
 interface AppRouteChildren {
+  AppAssistantRoute: typeof AppAssistantRouteWithChildren
   AppDashboardRoute: typeof AppDashboardRoute
   AppEmailRoute: typeof AppEmailRoute
   AppMeetingsRoute: typeof AppMeetingsRoute
@@ -274,6 +344,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAssistantRoute: AppAssistantRouteWithChildren,
   AppDashboardRoute: AppDashboardRoute,
   AppEmailRoute: AppEmailRoute,
   AppMeetingsRoute: AppMeetingsRoute,
