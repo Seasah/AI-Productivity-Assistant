@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, type UIMessage } from "ai";
 import { createResponsesCall } from "@/server/responses";
-import { withLovableAiGatewayRunIdHeader } from "@/server/run-id";
 import { GATEWAY, SYSTEM_BASE, getUserClient, jsonError } from "@/server/auth.server";
 
 export const Route = createFileRoute("/api/chat")({
@@ -56,7 +55,6 @@ export const Route = createFileRoute("/api/chat")({
           await convertToModelMessages(messages),
           SYSTEM_BASE,
         );
-        // Re-create runIdFetch-aware response with persistence
         const response = call.result.toUIMessageStreamResponse({
           originalMessages: messages,
           sendReasoning: true,
@@ -77,10 +75,7 @@ export const Route = createFileRoute("/api/chat")({
             return "The AI service had a problem. Please try again.";
           },
         });
-        return withLovableAiGatewayRunIdHeader(response, {
-          getRunId: () => undefined,
-          waitForRunId: async () => undefined,
-        });
+        return response;
       },
     },
   },
