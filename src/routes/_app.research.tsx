@@ -26,7 +26,7 @@ function ResearchPage() {
   const [text, setText] = useState("");
   const g = useGenerate("research");
   const go = () => {
-    if (!topic.trim() && !text.trim()) return toast.error("Enter a topic or paste some text.");
+    if (!topic.trim() && !text.trim()) { toast.error("Enter a topic or paste some text."); return; }
     g.run(`Topic: ${topic || "(see text)"}\n\n${text ? `User-supplied text:\n"""${text}"""` : "No text supplied — use general knowledge and say it is unverified."}`);
   };
   return (

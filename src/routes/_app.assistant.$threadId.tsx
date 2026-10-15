@@ -64,7 +64,7 @@ function ChatWindow({ threadId, initial }: { threadId: string; initial: UIMessag
 
   const clear = async () => {
     const { error } = await supabase.from("messages").delete().eq("thread_id", threadId);
-    if (error) return toast.error("Could not clear the conversation.");
+    if (error) { toast.error("Could not clear the conversation."); return; }
     setMessages([]);
     qc.removeQueries({ queryKey: ["messages", threadId] });
   };
@@ -88,8 +88,8 @@ function ChatWindow({ threadId, initial }: { threadId: string; initial: UIMessag
               </div>
             </ConversationEmptyState>
           ) : (
-            messages.map((m) => (
-              <Message key={m.id} from={m.role}>
+            messages.map((m, idx) => (
+              <Message key={`${m.id}-${idx}`} from={m.role}>
                 <MessageContent>
                   {m.parts.map((p, i) => (p.type === "text" ? (m.role === "assistant" ? <MessageResponse key={i}>{p.text}</MessageResponse> : <span key={i} className="whitespace-pre-wrap">{p.text}</span>) : null))}
                 </MessageContent>

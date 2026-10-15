@@ -27,7 +27,7 @@ function EmailPage() {
   const g = useGenerate("email");
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setF({ ...f, [k]: e.target.value });
   const generate = () => {
-    if (!f.recipient.trim() || !f.purpose.trim()) return toast.error("Please add a recipient and the purpose of the email.");
+    if (!f.recipient.trim() || !f.purpose.trim()) { toast.error("Please add a recipient and the purpose of the email."); return; }
     g.run(`Recipient/audience: ${f.recipient}\nSubject: ${f.subject || "(suggest one)"}\nPurpose: ${f.purpose}\nImportant details: ${f.details || "(none given)"}\nTone: ${f.tone}`);
   };
   return (

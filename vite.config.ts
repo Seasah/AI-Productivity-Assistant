@@ -12,4 +12,10 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    // Pre-bundle chat/UI deps so Vite never re-optimizes mid-session (stale chunks cause duplicate React).
+    optimizeDeps: {
+      include: ["@ai-sdk/react", "ai", "streamdown", "use-stick-to-bottom", "motion/react", "@radix-ui/react-dropdown-menu"],
+    },
+  },
 });

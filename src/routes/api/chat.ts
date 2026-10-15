@@ -7,7 +7,7 @@ export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = process.env.LOVABLE_API_KEY;
+        const apiKey = process.env['LOVABLE_API_KEY'];
         if (!apiKey) return jsonError(503, "The AI service is not configured yet.");
         const auth = await getUserClient(request);
         if (!auth) return jsonError(401, "Please sign in again.");
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/api/chat")({
           .maybeSingle();
         if (!thread) return jsonError(404, "Conversation not found.");
 
-        const last = messages[messages.length - 1];
+        const last = messages[messages.length - 1]!;
         if (last.role === "user") {
           const { error } = await supabase.from("messages").insert({
             thread_id: threadId,
@@ -57,6 +57,7 @@ export const Route = createFileRoute("/api/chat")({
         );
         const response = call.result.toUIMessageStreamResponse({
           originalMessages: messages,
+          generateMessageId: () => crypto.randomUUID(),
           sendReasoning: true,
           onFinish: async ({ responseMessage }) => {
             const { error } = await supabase.from("messages").insert({

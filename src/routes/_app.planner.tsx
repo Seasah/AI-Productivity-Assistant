@@ -53,12 +53,12 @@ function PlannerPage() {
   const refresh = () => { qc.invalidateQueries({ queryKey: ["tasks"] }); qc.invalidateQueries({ queryKey: ["dashboard"] }); };
 
   const save = async () => {
-    if (!form.title.trim()) return toast.error("Task name is required.");
+    if (!form.title.trim()) { toast.error("Task name is required."); return; }
     const dur = form.duration_minutes ? Number(form.duration_minutes) : null;
-    if (dur !== null && (isNaN(dur) || dur <= 0)) return toast.error("Duration must be a positive number of minutes.");
+    if (dur !== null && (isNaN(dur) || dur <= 0)) { toast.error("Duration must be a positive number of minutes."); return; }
     const row = { title: form.title.trim(), description: form.description || null, priority: form.priority, status: form.status, due_date: form.due_date || null, duration_minutes: dur };
     const { error } = form.id ? await supabase.from("tasks").update({ ...row, updated_at: new Date().toISOString() }).eq("id", form.id) : await supabase.from("tasks").insert(row);
-    if (error) return toast.error("Could not save the task.");
+    if (error) { toast.error("Could not save the task."); return; }
     toast.success(form.id ? "Task updated" : "Task added");
     setOpen(false); refresh();
   };
