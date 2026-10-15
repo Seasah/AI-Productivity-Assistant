@@ -24,7 +24,7 @@ function SettingsPage() {
   const { session } = useAuth();
   const [pw, setPw] = useState("");
   const change = async () => {
-    if (pw.length < 6) return toast.error("Password must be at least 6 characters.");
+    if (pw.length < 6) { toast.error("Password must be at least 6 characters."); return; }
     const { error } = await supabase.auth.updateUser({ password: pw });
     if (error) toast.error(error.message); else { toast.success("Password updated"); setPw(""); }
   };

@@ -22,10 +22,10 @@ export const Route = createFileRoute("/_app/meetings")({
 function MeetingsPage() {
   const [notes, setNotes] = useState("");
   const g = useGenerate("meeting");
-  const go = () => (notes.trim().length < 20 ? toast.error("Please paste at least a few lines of notes.") : g.run(notes));
+  const go = () => { if (notes.trim().length < 20) toast.error("Please paste at least a few lines of notes."); else g.run(notes); };
   const upload = async (file?: File) => {
     if (!file) return;
-    if (!/\.(txt|md|csv)$/i.test(file.name)) return toast.error("Please upload a .txt, .md or .csv file.");
+    if (!/\.(txt|md|csv)$/i.test(file.name)) { toast.error("Please upload a .txt, .md or .csv file."); return; }
     setNotes(await file.text());
   };
   return (

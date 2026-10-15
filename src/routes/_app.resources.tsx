@@ -46,16 +46,16 @@ function ResourcesPage() {
 
   const shown = data.filter((r) => (cat === "all" || r.category === cat) && `${r.title} ${r.description ?? ""} ${r.content ?? ""}`.toLowerCase().includes(q.toLowerCase()));
   const add = async () => {
-    if (!f.title.trim()) return toast.error("Title is required.");
+    if (!f.title.trim()) { toast.error("Title is required."); return; }
     const { error } = await supabase.from("resources").insert(f);
-    if (error) return toast.error("Could not save.");
+    if (error) { toast.error("Could not save."); return; }
     toast.success("Resource saved"); setAdding(false); setF({ title: "", category: "Notes", description: "", content: "" });
     qc.invalidateQueries({ queryKey: ["resources"] });
   };
   const del = async (id: string) => {
     if (!confirm("Delete this resource permanently?")) return;
     const { error } = await supabase.from("resources").delete().eq("id", id);
-    if (error) return toast.error("Could not delete.");
+    if (error) { toast.error("Could not delete."); return; }
     qc.invalidateQueries({ queryKey: ["resources"] });
   };
 

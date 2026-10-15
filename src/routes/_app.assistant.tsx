@@ -45,7 +45,7 @@ function AssistantLayout() {
   };
   const remove = async (id: string) => {
     const { error } = await supabase.from("threads").delete().eq("id", id);
-    if (error) return toast.error("Could not delete.");
+    if (error) { toast.error("Could not delete."); return; }
     await qc.invalidateQueries({ queryKey: ["threads"] });
     navigate({ to: "/assistant" });
   };

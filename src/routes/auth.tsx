@@ -32,7 +32,7 @@ function AuthPage() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password.length < 6) return toast.error("Password must be at least 6 characters.");
+    if (password.length < 6) { toast.error("Password must be at least 6 characters."); return; }
     setBusy(true);
     const { data, error } =
       mode === "in"
@@ -43,7 +43,7 @@ function AuthPage() {
             options: { emailRedirectTo: window.location.origin },
           });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     if (mode === "up" && !data.session) toast.success("Check your email to confirm your account.");
   };
 

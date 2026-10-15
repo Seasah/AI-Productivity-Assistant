@@ -15,7 +15,7 @@ export const Route = createFileRoute("/api/generate")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = process.env.LOVABLE_API_KEY;
+        const apiKey = process.env['LOVABLE_API_KEY'];
         if (!apiKey) return jsonError(503, "The AI service is not configured yet.");
         const auth = await getUserClient(request);
         if (!auth) return jsonError(401, "Please sign in again.");

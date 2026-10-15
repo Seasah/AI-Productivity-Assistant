@@ -24,7 +24,7 @@ export function AiDisclaimer() {
 }
 
 export async function saveResource(title: string, category: string, content: string, description?: string) {
-  const { error } = await supabase.from("resources").insert({ title, category, content, description });
+  const { error } = await supabase.from("resources").insert({ title, category, content, description: description ?? null });
   if (error) toast.error("Could not save to Business Resources.");
   else toast.success("Saved to Business Resources.");
 }

@@ -64,7 +64,7 @@ function ChatWindow({ threadId, initial }: { threadId: string; initial: UIMessag
 
   const clear = async () => {
     const { error } = await supabase.from("messages").delete().eq("thread_id", threadId);
-    if (error) return toast.error("Could not clear the conversation.");
+    if (error) { toast.error("Could not clear the conversation."); return; }
     setMessages([]);
     qc.removeQueries({ queryKey: ["messages", threadId] });
   };
