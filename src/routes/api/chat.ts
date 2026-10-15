@@ -57,6 +57,7 @@ export const Route = createFileRoute("/api/chat")({
         );
         const response = call.result.toUIMessageStreamResponse({
           originalMessages: messages,
+          generateMessageId: () => crypto.randomUUID(),
           sendReasoning: true,
           onFinish: async ({ responseMessage }) => {
             const { error } = await supabase.from("messages").insert({
