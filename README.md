@@ -1,24 +1,14 @@
-# Pixel Perfect Clone
+## 15. README.md Documentation
 
-Implement exactly the screenshot and nothing else
+Create a `README.md` file in the root directory of the Malibongwe Poultries project.
 
-This project was built with [Lovable](https://lovable.dev).
+The README must contain:
+1. Project overview and purpose.
+2. A list and explanation of the main application features.
+3. Tools and technologies used.
+4. Step-by-step setup and installation instructions.
+5. Instructions for configuring environment variables, AI integrations, and Supabase, if applicable.
+6. Instructions for running, testing, building, and deploying the application.
+7. Responsible AI and data security considerations.
 
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/dc17ed88-40dd-4968-aaf7-29bb7fc8e67a).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+Ensure the instructions match the actual project structure, dependencies, scripts, and environment variable names. Do not document unimplemented features as functional. Keep the README clear, professional, and suitable for submission as part of a project assessment.
